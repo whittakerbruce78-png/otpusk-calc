@@ -128,11 +128,11 @@
     <div class="grid">
       <div>
         <label for="months">Сколько месяцев отработано</label>
-        <input id="months" type="number" min="0" step="1" value="36" />
+        <input id="months" type="number" min="0" step="1" value="0" />
       </div>
       <div>
         <label for="daysYear">Сколько дней отпуска за год</label>
-        <input id="daysYear" type="number" min="0" step="0.01" value="28" />
+        <input id="daysYear" type="number" min="0" step="0.01" value="0" />
       </div>
       <div>
         <label for="usedDays">Сколько дней отпуска уже использовано</label>
@@ -140,7 +140,7 @@
       </div>
       <div>
         <label for="income12">Сумма выплат за расчетный период, ₽</label>
-        <input id="income12" type="number" min="0" step="0.01" value="1800000" />
+        <input id="income12" type="number" min="0" step="0.01" value="0" />
       </div>
     </div>
 
@@ -151,25 +151,25 @@
 
     <div class="card">
       <div>Неиспользованные дни отпуска</div>
-      <div class="big" id="daysOut">84</div>
+      <div class="big" id="daysOut">0</div>
       <div class="small">Формула: месяцы работы × дни отпуска за год ÷ 12 − использованные дни</div>
     </div>
 
     <div class="card">
       <div>Средний дневной заработок</div>
-      <div class="big" id="dailyOut">5 119,45 ₽</div>
+      <div class="big" id="dailyOut">0,00 ₽</div>
       <div class="small">Формула: сумма выплат за 12 месяцев ÷ 12 ÷ 29,3 (при стандартном расчете)</div>
     </div>
 
     <div class="card">
       <div>Сумма компенсации</div>
-      <div class="big" id="sumOut">430 033,95 ₽</div>
+      <div class="big" id="sumOut">0,00 ₽</div>
       <div class="small">Формула: неиспользованные дни × средний дневной заработок</div>
     </div>
 
     <div class="card">
       <div>Ориентировочно на руки после НДФЛ 13%</div>
-      <div class="big" id="netOut">374 129,54 ₽</div>
+      <div class="big" id="netOut">0,00 ₽</div>
     </div>
 
     <ol class="steps">
@@ -213,10 +213,10 @@
     }
 
     function resetForm(){
-      document.getElementById('months').value = 36;
-      document.getElementById('daysYear').value = 28;
+      document.getElementById('months').value = 0;
+      document.getElementById('daysYear').value = 0;
       document.getElementById('usedDays').value = 0;
-      document.getElementById('income12').value = 1800000;
+      document.getElementById('income12').value = 0;
       calc();
     }
 
@@ -247,7 +247,6 @@
           let income = 0;
           let fileMonths = 0;
 
-          // Ищем "Общая сумма дохода"
           const incomeMatch = fullText.match(/Общая сумма дохода\s*[:]?\s*([\d\s]+[,.]\d{2})/i);
           if (incomeMatch) {
             const incomeStr = incomeMatch[1].replace(/\s/g, '').replace(',', '.');
@@ -259,7 +258,6 @@
             }
           }
 
-          // Поиск уникальных месяцев
           const monthsMatch = fullText.match(/(\b0[1-9]\b|\b1[0-2]\b)/g);
           if (monthsMatch && monthsMatch.length > 0) {
             const uniqueMonths = new Set(monthsMatch);
@@ -289,7 +287,7 @@
       alert(`Обработано файлов: ${processedFiles} из ${files.length}.\n\nРезультаты:\n${messages.join('\n')}\n\nПоля калькулятора были обновлены суммарными значениями.`);
 
       loading.style.display = 'none';
-      document.getElementById('pdfInput').value = ''; // Сброс инпута
+      document.getElementById('pdfInput').value = '';
     }
 
     calc();
