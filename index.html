@@ -3,168 +3,295 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Форма расчета компенсации за неиспользованный отпуск</title>
-  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=boska@500,700&display=swap" rel="stylesheet">
+  <title>Калькулятор компенсации за отпуск</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
   <style>
-    :root,[data-theme="light"]{--text-xs:clamp(.75rem,.7rem + .25vw,.875rem);--text-sm:clamp(.875rem,.8rem + .35vw,1rem);--text-base:clamp(1rem,.95rem + .25vw,1.125rem);--text-lg:clamp(1.125rem,1rem + .75vw,1.5rem);--text-xl:clamp(1.7rem,1.2rem + 1.9vw,3rem);--space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;--space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;--space-12:3rem;--space-16:4rem;--bg:#f7f6f2;--surface:#f9f8f5;--surface-2:#fbfbf9;--border:#d4d1ca;--text:#28251d;--muted:#7a7974;--primary:#01696f;--primary-hover:#0c4e54;--primary-soft:#cedcd8;--success:#437a22;--radius-md:.6rem;--radius-lg:.9rem;--radius-xl:1.2rem;--shadow:0 12px 32px rgba(0,0,0,.08);--font-display:'Boska',Georgia,serif;--font-body:'Satoshi',Inter,sans-serif}
-    [data-theme="dark"]{--bg:#171614;--surface:#1c1b19;--surface-2:#201f1d;--border:#393836;--text:#cdccca;--muted:#8e8c88;--primary:#4f98a3;--primary-hover:#227f8b;--primary-soft:#313b3b;--success:#6daa45;--shadow:0 14px 36px rgba(0,0,0,.35)}
-    *,*:before,*:after{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;font-family:var(--font-body);font-size:var(--text-base);line-height:1.6;background:var(--bg);color:var(--text)}
-    button,input{font:inherit} .wrap{max-width:1120px;margin:0 auto;padding:var(--space-6)} .top{display:flex;justify-content:space-between;align-items:center;gap:var(--space-4);margin-bottom:var(--space-6)}
-    .brand{display:flex;align-items:center;gap:var(--space-3);font-weight:700}.brand-mark{width:40px;height:40px;border-radius:14px;background:linear-gradient(135deg,var(--primary),var(--primary-hover));position:relative;box-shadow:0 4px 14px rgba(1,105,111,.22)}
-    .brand-mark:before,.brand-mark:after{content:"";position:absolute;left:10px;width:20px;height:4px;background:#fff;border-radius:999px}.brand-mark:before{top:12px;transform:rotate(-35deg)}.brand-mark:after{top:23px;transform:rotate(35deg)}
-    .theme{min-width:44px;min-height:44px;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:999px;cursor:pointer}
-    .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:var(--space-6)} .card{background:var(--surface);border:1px solid color-mix(in oklab,var(--text) 10%,transparent);border-radius:var(--radius-xl);box-shadow:var(--shadow)}
-    .pad{padding:var(--space-8)} h1{margin:0 0 var(--space-4);font-family:var(--font-display);font-size:var(--text-xl);line-height:1.03} h2{margin:0 0 var(--space-4);font-size:var(--text-lg);line-height:1.15}
-    .lead{margin:0 0 var(--space-5);color:var(--muted)} .badge{display:inline-flex;align-items:center;gap:var(--space-2);padding:var(--space-2) var(--space-3);border-radius:999px;background:var(--primary-soft);font-size:var(--text-sm);margin-bottom:var(--space-4)}
-    .steps{display:grid;gap:var(--space-3);margin:0;padding:0;list-style:none}.step{display:grid;grid-template-columns:36px 1fr;gap:var(--space-3);align-items:start}.num{display:grid;place-items:center;width:36px;height:36px;border-radius:999px;background:var(--primary);color:#fff;font-weight:700}
-    form{display:grid;gap:var(--space-5)} .grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4)} label{display:grid;gap:var(--space-2);font-weight:600} .sub{font-size:var(--text-sm);font-weight:400;color:var(--muted)}
-    input{width:100%;padding:1rem;border-radius:var(--radius-lg);border:1px solid var(--border);background:var(--surface-2);color:var(--text)} input:focus{outline:2px solid var(--primary);outline-offset:2px}
-    .actions{display:flex;gap:var(--space-3);flex-wrap:wrap}.btn{min-height:48px;padding:.9rem 1.15rem;border-radius:999px;border:1px solid var(--border);cursor:pointer}.primary{background:var(--primary);color:#fff;border-color:transparent}.primary:hover{background:var(--primary-hover)}
-    .results{display:grid;gap:var(--space-4)} .box{padding:var(--space-5);border-radius:var(--radius-lg);background:var(--surface-2);border:1px solid color-mix(in oklab,var(--text) 10%,transparent)} .mini{font-size:var(--text-sm);color:var(--muted)} .big{margin:.35rem 0 0;font-size:clamp(1.8rem,1.3rem + 2vw,3.2rem);line-height:1;font-weight:700;letter-spacing:-.03em}
-    .green{color:var(--success)} .formula{display:grid;gap:var(--space-2)} .help{margin-top:var(--space-6);font-size:var(--text-sm);color:var(--muted)} .copy{margin-top:var(--space-4);font-size:var(--text-sm);color:var(--muted)} code{background:var(--surface-2);padding:.12rem .35rem;border-radius:6px}
-    @media (max-width:860px){.hero,.grid{grid-template-columns:1fr}.pad{padding:var(--space-6)}.wrap{padding:var(--space-4)}}
+    body{
+      font-family: Arial, sans-serif;
+      background:#f6f7fb;
+      margin:0;
+      padding:20px;
+      color:#222;
+    }
+    .wrap{
+      max-width:900px;
+      margin:0 auto;
+      background:#fff;
+      padding:24px;
+      border-radius:16px;
+      box-shadow:0 8px 30px rgba(0,0,0,.08);
+    }
+    h1{margin-top:0}
+    .hint{
+      color:#666;
+      margin-bottom:20px;
+      line-height:1.5;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:16px;
+    }
+    label{
+      display:block;
+      font-weight:700;
+      margin-bottom:6px;
+    }
+    input{
+      width:100%;
+      box-sizing:border-box;
+      padding:12px 14px;
+      border:1px solid #cfd6e4;
+      border-radius:10px;
+      font-size:16px;
+    }
+    .file-upload {
+      grid-column: 1 / -1;
+      padding: 20px;
+      border: 2px dashed #0b74ff;
+      border-radius: 10px;
+      text-align: center;
+      background: #e9eef7;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+    .file-upload:hover {
+      background: #d0def2;
+    }
+    .btns{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+    button{
+      border:none;
+      border-radius:999px;
+      padding:12px 18px;
+      font-size:16px;
+      cursor:pointer;
+    }
+    .primary{background:#0b74ff;color:#fff}
+    .secondary{background:#e9eef7;color:#222}
+    .card{
+      margin-top:22px;
+      padding:18px;
+      border-radius:14px;
+      background:#f8fafc;
+      border:1px solid #e2e8f0;
+    }
+    .big{
+      font-size:34px;
+      font-weight:800;
+      margin:8px 0 0;
+      color:#0b6b3a;
+    }
+    .small{color:#666;margin:6px 0 0}
+    .steps{
+      margin-top:22px;
+      padding-left:20px;
+      color:#444;
+      line-height:1.6;
+    }
+    .steps li{margin-bottom:8px}
+    .footer{
+      margin-top:18px;
+      color:#666;
+      font-size:14px;
+      line-height:1.5;
+    }
+    #loading {
+      display: none;
+      color: #0b74ff;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    @media (max-width:700px){
+      .grid{grid-template-columns:1fr}
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="top">
-      <div class="brand"><span class="brand-mark" aria-hidden="true"></span><span>Форма расчета отпускной компенсации</span></div>
-      <button class="theme" data-theme-toggle aria-label="Сменить тему">◐</button>
+    <h1>Калькулятор компенсации за неиспользованный отпуск</h1>
+    <p class="hint">
+      Вы можете загрузить справки 2-НДФЛ (в формате PDF) — мы сложим суммы доходов и количество отработанных месяцев со всех загруженных справок.
+    </p>
+
+    <div class="file-upload" onclick="document.getElementById('pdfInput').click()">
+      <strong>Загрузить справки 2-НДФЛ (PDF)</strong>
+      <div class="small">Можно выбрать сразу несколько файлов</div>
+      <input type="file" id="pdfInput" accept="application/pdf" multiple style="display:none" onchange="handleFile(this.files)" />
+      <div id="loading">Обработка PDF...</div>
     </div>
 
-    <div class="hero">
-      <section class="card pad">
-        <div class="badge">Этой формой можно делиться с другими</div>
-        <h1>Понятная форма расчета компенсации за неиспользованный отпуск</h1>
-        <p class="lead">Форма считает ориентировочную сумму компенсации при увольнении: сначала определяется количество неиспользованных дней отпуска, затем средний дневной заработок, после чего они перемножаются.[web:93][web:106][web:112]</p>
-        <ol class="steps">
-          <li class="step"><span class="num">1</span><div><strong>Поле «Сколько месяцев отработано».</strong> Вставьте общее количество месяцев работы у работодателя. Если человек отработал 3 года, ставьте <code>36</code>. Если 2 года и 6 месяцев — <code>30</code>.[web:93][web:106]</div></li>
-          <li class="step"><span class="num">2</span><div><strong>Поле «Сколько дней отпуска положено за год».</strong> Обычно это <code>28</code> дней. Если у человека удлиненный отпуск по закону или локальным актам, укажите свое значение.[web:106][web:112]</div></li>
-          <li class="step"><span class="num">3</span><div><strong>Поле «Сколько дней отпуска уже использовано».</strong> Если отпуск не брали ни разу — ставьте <code>0</code>. Если часть отпуска уже была использована, впишите общее количество использованных дней.[web:93][web:106]</div></li>
-          <li class="step"><span class="num">4</span><div><strong>Поле «Сумма выплат за последние 12 месяцев».</strong> Сложите все выплаты, которые обычно берутся для расчета среднего заработка, и вставьте общую сумму за 12 месяцев. Если каждый месяц платили 150 000 руб., вставьте <code>1800000</code>.[web:106][web:108]</div></li>
-          <li class="step"><span class="num">5</span><div><strong>Нажмите «Рассчитать».</strong> Форма покажет количество неиспользованных дней, средний дневной заработок, полную сумму компенсации и ориентировочную сумму после НДФЛ 13%.[web:106][web:112]</div></li>
-        </ol>
-        <p class="copy">Важно: по ст. 127 ТК РФ денежная компенсация за неиспользованный отпуск выплачивается именно при увольнении.[web:93][web:112]</p>
-      </section>
-
-      <section class="card pad">
-        <h2>Заполните поля</h2>
-        <form id="calcForm">
-          <div class="grid">
-            <label>
-              Сколько месяцев отработано
-              <span class="sub">Пример: 36 месяцев = 3 года</span>
-              <input type="number" min="0" step="1" id="months" value="36">
-            </label>
-            <label>
-              Сколько дней отпуска положено за год
-              <span class="sub">Обычно 28 дней</span>
-              <input type="number" min="0" step="0.01" id="daysYear" value="28">
-            </label>
-          </div>
-          <div class="grid">
-            <label>
-              Сколько дней отпуска уже использовано
-              <span class="sub">Если не использовали, поставьте 0</span>
-              <input type="number" min="0" step="0.01" id="usedDays" value="0">
-            </label>
-            <label>
-              Сумма выплат за последние 12 месяцев, ₽
-              <span class="sub">Пример: 150000 × 12 = 1800000</span>
-              <input type="number" min="0" step="0.01" id="income12" value="1800000">
-            </label>
-          </div>
-          <div class="actions">
-            <button type="submit" class="btn primary">Рассчитать</button>
-            <button type="button" class="btn" id="resetBtn">Сбросить</button>
-          </div>
-        </form>
-      </section>
-    </div>
-
-    <section class="card pad" style="margin-top: var(--space-6);">
-      <h2>Результат расчета</h2>
-      <div class="results">
-        <div class="grid">
-          <div class="box">
-            <div class="mini">Неиспользованные дни отпуска</div>
-            <div class="big" id="daysOut">84</div>
-          </div>
-          <div class="box">
-            <div class="mini">Средний дневной заработок</div>
-            <div class="big" id="dailyOut">5 119,45 ₽</div>
-          </div>
-        </div>
-        <div class="box">
-          <div class="mini">Полная сумма компенсации</div>
-          <div class="big green" id="sumOut">430 033,95 ₽</div>
-        </div>
-        <div class="box">
-          <div class="mini">Ориентировочно после НДФЛ 13%</div>
-          <div class="big" id="netOut">374 129,54 ₽</div>
-        </div>
-        <div class="box formula">
-          <div class="mini">Как считает форма</div>
-          <div>1. Дни отпуска: <code>(месяцы работы × дни отпуска за год ÷ 12) − использованные дни</code>.[web:93][web:106]</div>
-          <div>2. Средний день: <code>сумма выплат за 12 месяцев ÷ 12 ÷ 29,3</code>.[web:106][web:108]</div>
-          <div>3. Компенсация: <code>неиспользованные дни × средний дневной заработок</code>.[web:106][web:112]</div>
-        </div>
+    <div class="grid">
+      <div>
+        <label for="months">Сколько месяцев отработано</label>
+        <input id="months" type="number" min="0" step="1" value="36" />
       </div>
-      <p class="help">Это предварительный калькулятор для понятного бытового расчета. Для претензии, иска или судебной экспертизы обычно дополнительно проверяют, какие выплаты включаются в расчетный период, были ли исключаемые периоды и на какую дату происходит увольнение.[web:106][web:109][web:110]</p>
-    </section>
+      <div>
+        <label for="daysYear">Сколько дней отпуска за год</label>
+        <input id="daysYear" type="number" min="0" step="0.01" value="28" />
+      </div>
+      <div>
+        <label for="usedDays">Сколько дней отпуска уже использовано</label>
+        <input id="usedDays" type="number" min="0" step="0.01" value="0" />
+      </div>
+      <div>
+        <label for="income12">Сумма выплат за расчетный период, ₽</label>
+        <input id="income12" type="number" min="0" step="0.01" value="1800000" />
+      </div>
+    </div>
+
+    <div class="btns">
+      <button class="primary" onclick="calc()">Рассчитать</button>
+      <button class="secondary" onclick="resetForm()">Сбросить</button>
+    </div>
+
+    <div class="card">
+      <div>Неиспользованные дни отпуска</div>
+      <div class="big" id="daysOut">84</div>
+      <div class="small">Формула: месяцы работы × дни отпуска за год ÷ 12 − использованные дни</div>
+    </div>
+
+    <div class="card">
+      <div>Средний дневной заработок</div>
+      <div class="big" id="dailyOut">5 119,45 ₽</div>
+      <div class="small">Формула: сумма выплат за 12 месяцев ÷ 12 ÷ 29,3 (при стандартном расчете)</div>
+    </div>
+
+    <div class="card">
+      <div>Сумма компенсации</div>
+      <div class="big" id="sumOut">430 033,95 ₽</div>
+      <div class="small">Формула: неиспользованные дни × средний дневной заработок</div>
+    </div>
+
+    <div class="card">
+      <div>Ориентировочно на руки после НДФЛ 13%</div>
+      <div class="big" id="netOut">374 129,54 ₽</div>
+    </div>
+
+    <ol class="steps">
+      <li>Поле «Сколько месяцев отработано» — загрузи справки 2-НДФЛ или впиши суммарный срок.</li>
+      <li>Поле «Сколько дней отпуска за год» — обычно 28.</li>
+      <li>Поле «Сколько дней отпуска уже использовано» — если отпуск не брали, поставь 0.</li>
+      <li>Поле «Сумма выплат» — автоматически заполнится при загрузке справок.</li>
+      <li>Нажми «Рассчитать» — форма покажет сумму компенсации.</li>
+    </ol>
+
+    <p class="footer">
+      Это предварительный расчет. При парсинге нескольких 2-НДФЛ, доходы и месяцы работы просто суммируются. Обязательно проверяйте корректность извлеченных данных.
+    </p>
   </div>
 
   <script>
-    (function(){
-      const root = document.documentElement;
-      const btn = document.querySelector('[data-theme-toggle]');
-      let theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      root.setAttribute('data-theme', theme);
-      btn.addEventListener('click', () => {
-        theme = theme === 'dark' ? 'light' : 'dark';
-        root.setAttribute('data-theme', theme);
-      });
-    })();
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
-    const form = document.getElementById('calcForm');
-    const months = document.getElementById('months');
-    const daysYear = document.getElementById('daysYear');
-    const usedDays = document.getElementById('usedDays');
-    const income12 = document.getElementById('income12');
-    const resetBtn = document.getElementById('resetBtn');
-    const daysOut = document.getElementById('daysOut');
-    const dailyOut = document.getElementById('dailyOut');
-    const sumOut = document.getElementById('sumOut');
-    const netOut = document.getElementById('netOut');
-
-    const money = new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    const num = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 2 });
+    function money(n){
+      return new Intl.NumberFormat('ru-RU', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(n) + ' ₽';
+    }
 
     function calc(){
-      const m = Math.max(0, Number(months.value) || 0);
-      const dy = Math.max(0, Number(daysYear.value) || 0);
-      const used = Math.max(0, Number(usedDays.value) || 0);
-      const income = Math.max(0, Number(income12.value) || 0);
+      const months = Number(document.getElementById('months').value) || 0;
+      const daysYear = Number(document.getElementById('daysYear').value) || 0;
+      const usedDays = Number(document.getElementById('usedDays').value) || 0;
+      const income12 = Number(document.getElementById('income12').value) || 0;
 
-      const days = Math.max(0, (m * dy / 12) - used);
-      const daily = income / 12 / 29.3;
+      const days = Math.max(0, (months * daysYear / 12) - usedDays);
+      const daily = income12 / 12 / 29.3;
       const total = days * daily;
       const net = total * 0.87;
 
-      daysOut.textContent = num.format(days);
-      dailyOut.textContent = money.format(daily) + ' ₽';
-      sumOut.textContent = money.format(total) + ' ₽';
-      netOut.textContent = money.format(net) + ' ₽';
+      document.getElementById('daysOut').textContent = days.toFixed(2).replace('.00','');
+      document.getElementById('dailyOut').textContent = money(daily);
+      document.getElementById('sumOut').textContent = money(total);
+      document.getElementById('netOut').textContent = money(net);
     }
 
-    form.addEventListener('submit', (e) => { e.preventDefault(); calc(); });
-    resetBtn.addEventListener('click', () => {
-      months.value = 36;
-      daysYear.value = 28;
-      usedDays.value = 0;
-      income12.value = 1800000;
+    function resetForm(){
+      document.getElementById('months').value = 36;
+      document.getElementById('daysYear').value = 28;
+      document.getElementById('usedDays').value = 0;
+      document.getElementById('income12').value = 1800000;
       calc();
-    });
+    }
+
+    async function handleFile(files) {
+      if (!files || files.length === 0) return;
+      const loading = document.getElementById('loading');
+      loading.style.display = 'block';
+
+      let totalIncome = 0;
+      let totalMonths = 0;
+      let processedFiles = 0;
+      let messages = [];
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        try {
+          const arrayBuffer = await file.arrayBuffer();
+          const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+          
+          let fullText = '';
+          for (let p = 1; p <= pdf.numPages; p++) {
+            const page = await pdf.getPage(p);
+            const textContent = await page.getTextContent();
+            const pageText = textContent.items.map(item => item.str).join(' ');
+            fullText += pageText + ' ';
+          }
+
+          let income = 0;
+          let fileMonths = 0;
+
+          // Ищем "Общая сумма дохода"
+          const incomeMatch = fullText.match(/Общая сумма дохода\s*[:]?\s*([\d\s]+[,.]\d{2})/i);
+          if (incomeMatch) {
+            const incomeStr = incomeMatch[1].replace(/\s/g, '').replace(',', '.');
+            income = parseFloat(incomeStr);
+            if (!isNaN(income)) {
+              totalIncome += income;
+            } else {
+              income = 0;
+            }
+          }
+
+          // Поиск уникальных месяцев
+          const monthsMatch = fullText.match(/(\b0[1-9]\b|\b1[0-2]\b)/g);
+          if (monthsMatch && monthsMatch.length > 0) {
+            const uniqueMonths = new Set(monthsMatch);
+            if (uniqueMonths.size > 0 && uniqueMonths.size <= 12) {
+                fileMonths = uniqueMonths.size;
+                totalMonths += fileMonths;
+            }
+          }
+
+          messages.push(`- ${file.name}: Доход = ${income ? income + ' ₽' : 'Не найдено'}, Месяцев = ${fileMonths || 'Не найдено'}`);
+          processedFiles++;
+        } catch (e) {
+          console.error(e);
+          messages.push(`- ${file.name}: Ошибка обработки (${e.message})`);
+        }
+      }
+
+      if (totalIncome > 0) {
+        document.getElementById('income12').value = totalIncome;
+      }
+      if (totalMonths > 0) {
+        document.getElementById('months').value = totalMonths;
+      }
+
+      calc();
+      
+      alert(`Обработано файлов: ${processedFiles} из ${files.length}.\n\nРезультаты:\n${messages.join('\n')}\n\nПоля калькулятора были обновлены суммарными значениями.`);
+
+      loading.style.display = 'none';
+      document.getElementById('pdfInput').value = ''; // Сброс инпута
+    }
+
     calc();
   </script>
 </body>
