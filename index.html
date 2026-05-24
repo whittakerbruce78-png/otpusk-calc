@@ -139,7 +139,7 @@
         <input id="usedDays" type="number" min="0" step="0.01" value="0" />
       </div>
       <div>
-        <label for="income12">Сумма выплат за расчетный период, ₽</label>
+        <label for="income12">Общая сумма выплат за расчетный период, ₽</label>
         <input id="income12" type="number" min="0" step="0.01" value="0" />
       </div>
     </div>
@@ -158,7 +158,7 @@
     <div class="card">
       <div>Средний дневной заработок</div>
       <div class="big" id="dailyOut">0,00 ₽</div>
-      <div class="small">Формула: сумма выплат за 12 месяцев ÷ 12 ÷ 29,3 (при стандартном расчете)</div>
+      <div class="small">Формула: общая сумма выплат ÷ количество месяцев ÷ 29,3</div>
     </div>
 
     <div class="card">
@@ -202,7 +202,8 @@
       const income12 = Number(document.getElementById('income12').value) || 0;
 
       const days = Math.max(0, (months * daysYear / 12) - usedDays);
-      const daily = income12 / 12 / 29.3;
+      const calcMonths = months > 0 ? months : 12; // Защита от деления на 0
+      const daily = income12 / calcMonths / 29.3;
       const total = days * daily;
       const net = total * 0.87;
 
