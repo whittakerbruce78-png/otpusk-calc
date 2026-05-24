@@ -156,6 +156,12 @@
     </div>
 
     <div class="card">
+      <div>Средняя зарплата в месяц</div>
+      <div class="big" id="monthlyOut">0,00 ₽</div>
+      <div class="small">Формула: общая сумма выплат ÷ количество месяцев</div>
+    </div>
+
+    <div class="card">
       <div>Средний дневной заработок</div>
       <div class="big" id="dailyOut">0,00 ₽</div>
       <div class="small">Формула: общая сумма выплат ÷ количество месяцев ÷ 29,3</div>
@@ -203,11 +209,13 @@
 
       const days = Math.max(0, (months * daysYear / 12) - usedDays);
       const calcMonths = months > 0 ? months : 12; // Защита от деления на 0
-      const daily = income12 / calcMonths / 29.3;
+      const monthly = income12 / calcMonths;
+      const daily = monthly / 29.3;
       const total = days * daily;
       const net = total * 0.87;
 
       document.getElementById('daysOut').textContent = days.toFixed(2).replace('.00','');
+      document.getElementById('monthlyOut').textContent = money(monthly);
       document.getElementById('dailyOut').textContent = money(daily);
       document.getElementById('sumOut').textContent = money(total);
       document.getElementById('netOut').textContent = money(net);
